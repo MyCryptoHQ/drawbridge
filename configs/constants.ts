@@ -2,8 +2,8 @@
 import * as path from 'path'
 
 
-export const APP_NAME = 'deployTools'
-export const DOCKER_CONTAINER_NAME = 'deploy_tools'
+export const APP_NAME = 'drawbridge'
+export const DOCKER_CONTAINER_NAME = 'drawbridge'
 export const DOCKERFILE_FOLDER = path.resolve('./docker')
 
 export const REQUIRED_CLI_APPS = [ 'git', 'node', 'npm', 'docker' ]
