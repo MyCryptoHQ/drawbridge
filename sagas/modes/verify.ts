@@ -13,8 +13,6 @@ const { red, yellow, green } = require('chalk')
 export function* verifyMode() {
   const { repoFrom, repoTo } = yield call(getOptions)
 
-  console.log(repoFrom, repoTo)
-
   if (repoFrom === 'develop' && repoTo === 'staging') {
     yield call(verifyStagingAgainstDevelop)
   } else if (repoFrom === 'staging' && repoTo === 'prod') {
