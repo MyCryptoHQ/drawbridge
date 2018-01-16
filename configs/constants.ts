@@ -33,18 +33,18 @@ interface IRepoInfo {
 
 export const REPO_INFO: IRepoInfo = {
   develop: {
-    gitUrl: 'git@github.com:MyEtherWallet/MyEtherWallet.git',
+    gitUrl: 'git@github.com:skubakdj/developMockTemp.git',
     workingFolder: path.resolve(SESSION_FOLDER, 'develop'),
     distFolder: path.resolve(SESSION_FOLDER, 'develop', 'dist'),
     buildCommand: 'npm run build'
   },
   staging: {
-    gitUrl: 'git@github.com:skubakdj/stagingMockMEW.git',
+    gitUrl: 'git@github.com:skubakdj/stagingMockTemp.git',
     workingFolder: path.resolve(SESSION_FOLDER, 'staging'),
     distFolder: path.resolve(SESSION_FOLDER, 'staging', 'docs')
   },
   prod: {
-    gitUrl: 'git@github.com:skubakdj/prodMockMEW.git',
+    gitUrl: 'git@github.com:skubakdj/prodMockTemp.git',
     workingFolder: path.resolve(SESSION_FOLDER, 'prod'),
     distFolder: path.resolve(SESSION_FOLDER, 'prod', 'docs'),
   }
