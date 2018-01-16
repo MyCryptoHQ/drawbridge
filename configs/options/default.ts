@@ -1,4 +1,3 @@
-
 import { IOptions } from './types'
 
 export const defaultOptions: IOptions = {

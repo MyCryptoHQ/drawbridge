@@ -1,14 +1,11 @@
-
-
 import { call } from 'redux-saga/effects'
-import { TRepos } from '../../configs/options/types';
-import { SagaIterator } from 'redux-saga';
+import { TRepos } from '../../configs/options/types'
+import { SagaIterator } from 'redux-saga'
 
 import { logger } from '../../lib'
 import { calcRepoReportAndHash } from '../helpers'
 import { getOptions, getRepoInfo } from '../../configs'
 const { red, yellow, green } = require('chalk')
-
 
 export function* verifyMode() {
   const { repoFrom, repoTo } = yield call(getOptions)
@@ -18,26 +15,21 @@ export function* verifyMode() {
   } else if (repoFrom === 'staging' && repoTo === 'prod') {
     yield call(verifyProdAgainstStaging)
   } else {
-    throw new Error(`Cannot verify repo ${
-      repoFrom
-    } against repo ${repoTo}`)
+    throw new Error(`Cannot verify repo ${repoFrom} against repo ${repoTo}`)
   }
 }
-
-
 
 export function* verifyAAgainstB(
   repoFrom: TRepos,
   repoTo: TRepos
 ): SagaIterator {
-
   const options = yield call(getOptions)
 
   const fromBranch = options[`${repoFrom}Branch`]
   const fromCommit = options[`${repoFrom}Commit`]
   const toBranch = options[`${repoTo}Branch`]
   const toCommit = options[`${repoTo}Commit`]
-  
+
   const repoFromHashRepot = yield call(
     calcRepoReportAndHash,
     repoFrom,
@@ -45,7 +37,7 @@ export function* verifyAAgainstB(
     fromCommit
   )
   const fromHash = repoFromHashRepot.hash
-  const fromReport = repoFromHashRepot.report  
+  const fromReport = repoFromHashRepot.report
 
   const repoToHashRepot = yield call(
     calcRepoReportAndHash,
@@ -54,14 +46,10 @@ export function* verifyAAgainstB(
     toCommit
   )
   const toHash = repoToHashRepot.hash
-  const toReport = repoToHashRepot.report  
+  const toReport = repoToHashRepot.report
 
-  logger.succeed(
-    `${repoFrom} hash:\t${yellow(fromHash)}`
-  )
-  logger.succeed(
-    `${repoTo} hash:\t${yellow(toHash)}`
-  )
+  logger.succeed(`${repoFrom} hash:\t${yellow(fromHash)}`)
+  logger.succeed(`${repoTo} hash:\t${yellow(toHash)}`)
 
   if (fromHash === toHash) {
     logger.succeed(green('Hashes are a match!'))
@@ -74,20 +62,12 @@ export function* verifyStagingAgainstDevelop(): SagaIterator {
   const repoFrom = 'develop'
   const repoTo = 'staging'
 
-  yield call(
-    verifyAAgainstB,
-    repoFrom,
-    repoTo
-  )
+  yield call(verifyAAgainstB, repoFrom, repoTo)
 }
 
 export function* verifyProdAgainstStaging(): SagaIterator {
   const repoFrom = 'staging'
   const repoTo = 'prod'
 
-  yield call(
-    verifyAAgainstB,
-    repoFrom,
-    repoTo
-  )
+  yield call(verifyAAgainstB, repoFrom, repoTo)
 }

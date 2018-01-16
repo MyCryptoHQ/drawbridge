@@ -1,17 +1,17 @@
-import { 
-  options, 
-  REPO_INFO, 
-  DOCKER_CONTAINER_NAME, 
-  DOCKERFILE_FOLDER 
+import {
+  options,
+  REPO_INFO,
+  DOCKER_CONTAINER_NAME,
+  DOCKERFILE_FOLDER
 } from '../configs'
 
 const { yellow } = require('chalk')
 
 import { call } from 'redux-saga/effects'
-import { SagaIterator } from 'redux-saga';
+import { SagaIterator } from 'redux-saga'
 import * as path from 'path'
-import { 
-  logger, 
+import {
+  logger,
   cloneGitRepository,
   criticalFailure,
   enumerateFilesInDir,
@@ -28,8 +28,7 @@ import {
   checkoutGitBranch,
   checkoutGitCommit
 } from '../lib'
-import { TRepos } from '../configs/options/types';
-
+import { TRepos } from '../configs/options/types'
 
 export function* cloneAndBuildProject(
   repo: TRepos,
@@ -41,17 +40,21 @@ export function* cloneAndBuildProject(
 
   try {
     logger.log(`Cloning ${yellow(repo)}, watch for SSH password prompt`)
-    yield call( cloneGitRepository, gitUrl, workingFolder )
+    yield call(cloneGitRepository, gitUrl, workingFolder)
     logger.succeed(`Cloned ${yellow(repo)} to ${yellow(workingFolder)}`)
 
     if (!!repoBranch) {
-      yield call( checkoutGitBranch, workingFolder, repoBranch )
-      logger.succeed(`Checked out branch ${yellow(repoBranch)} on repo ${yellow(repo)}`)      
+      yield call(checkoutGitBranch, workingFolder, repoBranch)
+      logger.succeed(
+        `Checked out branch ${yellow(repoBranch)} on repo ${yellow(repo)}`
+      )
     }
 
     if (!!repoCommit) {
-      yield call( checkoutGitCommit, workingFolder, repoCommit )
-      logger.succeed(`Checked out commit ${yellow(repoCommit)} on repo ${yellow(repo)}`)      
+      yield call(checkoutGitCommit, workingFolder, repoCommit)
+      logger.succeed(
+        `Checked out commit ${yellow(repoCommit)} on repo ${yellow(repo)}`
+      )
     }
 
     if (isDevelop) {
@@ -64,27 +67,22 @@ export function* cloneAndBuildProject(
 
 export function* buildDevelop(): SagaIterator {
   const { workingFolder } = REPO_INFO.develop
-  
-  try {
 
+  try {
     logger.log('Building Docker image')
-    yield call ( buildDockerImage, DOCKERFILE_FOLDER, DOCKER_CONTAINER_NAME )
+    yield call(buildDockerImage, DOCKERFILE_FOLDER, DOCKER_CONTAINER_NAME)
     logger.succeed('Built Docker image')
 
     logger.log(`Building ${yellow('develop')} with Docker`)
-    yield call( buildProjectWithDocker, workingFolder, DOCKER_CONTAINER_NAME )
+    yield call(buildProjectWithDocker, workingFolder, DOCKER_CONTAINER_NAME)
     logger.succeed(`Built ${yellow('develop')} with Docker`)
-
   } catch (err) {
     criticalFailure(err)
   }
 }
 
-export function* genDirectoryContentReport(
-  directory: string
-): SagaIterator {
+export function* genDirectoryContentReport(directory: string): SagaIterator {
   try {
-
     logger.log(`Analyzing files in ${yellow(directory)}`)
 
     const files = yield call(enumerateFilesInDir, directory)
@@ -96,12 +94,11 @@ export function* genDirectoryContentReport(
     const fileWithHash = yield call(addFileSha256, normedFiles)
     logger.debug('Files hashed')
 
-    const fileOrFolder = yield call (addFileOrFolder, fileWithHash)
+    const fileOrFolder = yield call(addFileOrFolder, fileWithHash)
 
     logger.succeed(`Analyzed directory ${yellow(directory)}`)
 
     return fileOrFolder
-
   } catch (err) {
     criticalFailure(err)
   }
@@ -113,31 +110,18 @@ export function* cloneBuildReport(
   repoCommit: string | null
 ): SagaIterator {
   const { workingFolder, distFolder } = REPO_INFO[repo]
-  
+
   yield call(cloneAndBuildProject, repo, repoBranch, repoCommit)
 
-  return yield call(
-    genDirectoryContentReport, 
-    distFolder
-  )
+  return yield call(genDirectoryContentReport, distFolder)
 }
 
 export function* calcRepoReportAndHash(
   repo: TRepos,
-  repoBranch: string, 
+  repoBranch: string,
   repoCommit: string
 ) {
-
-  const report = yield call(
-    cloneBuildReport,
-    repo,
-    repoBranch,
-    repoCommit
-  )
-
-  const hash = yield call(
-    calcFileInfoContentHash,
-    report
-  )
+  const report = yield call(cloneBuildReport, repo, repoBranch, repoCommit)
+  const hash = yield call(calcFileInfoContentHash, report)
   return { report, hash }
 }

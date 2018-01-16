@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import * as R from 'ramda'
-import { 
+import {
   INextIndexAndState,
   IOptions,
   TRepos,
@@ -21,8 +21,8 @@ export function parseArgAndSetState(
   argv: string[]
 ): INextIndexAndState | void {
   const currentArg = argv[index]
-  
-  switch(currentArg) {
+
+  switch (currentArg) {
     case 'verify':
       return processVerify(index, state, argv)
 
@@ -55,27 +55,22 @@ export function parseArgAndSetState(
 
     case '--prodCommit':
       return processProdCommit(index, state, argv)
-    
+
     case '--newBranch':
       return proccessNewBranch(index, state, argv)
 
-    case '--commitMessage': 
+    case '--commitMessage':
       return processCommitMessage(index, state, argv)
 
     case '--logLevel':
       return processLogLevel(index, state, argv)
-    
-    default: 
-       return criticalFailure(
-         `Unknown option ${currentArg} in CLI arguments`
-       )
+
+    default:
+      return criticalFailure(`Unknown option ${currentArg} in CLI arguments`)
   }
 }
 
-const genModeHandler = (
-  targetMode: TModes,
-  prep: 'against' | 'to'
-) => (
+const genModeHandler = (targetMode: TModes, prep: 'against' | 'to') => (
   index: number,
   state: IOptions,
   argv: string[]
@@ -101,9 +96,7 @@ const genModeHandler = (
   return { nextIndex, nextState }
 }
 
-const genSingleArgHandler = (
-  flagTarget: TSingleArg 
-) => (
+const genSingleArgHandler = (flagTarget: TSingleArg) => (
   index: number,
   state: IOptions,
   argv: string[]
@@ -129,38 +122,21 @@ const processPackage = genModeHandler('package', 'to')
 
 const processPush = genModeHandler('push', 'to')
 
+const processDevelopBranch = genSingleArgHandler('developBranch')
 
-const processDevelopBranch = genSingleArgHandler(
-  'developBranch'
-)
+const processDevelopCommit = genSingleArgHandler('developCommit')
 
-const processDevelopCommit = genSingleArgHandler(
-  'developCommit'
-)
+const processStagingBranch = genSingleArgHandler('stagingBranch')
 
-const processStagingBranch = genSingleArgHandler(
-  'stagingBranch'
-)
+const processStagingCommit = genSingleArgHandler('stagingCommit')
 
-const processStagingCommit = genSingleArgHandler(
-  'stagingCommit'
-)
+const processProdBranch = genSingleArgHandler('prodBranch')
 
-const processProdBranch = genSingleArgHandler(
-  'prodBranch'
-)
+const processProdCommit = genSingleArgHandler('prodCommit')
 
-const processProdCommit = genSingleArgHandler(
-  'prodCommit'
-)
+const proccessNewBranch = genSingleArgHandler('newBranch')
 
-const proccessNewBranch = genSingleArgHandler(
-  'newBranch'
-)
-
-const processCommitMessage = genSingleArgHandler(
-  'commitMessage'
-)
+const processCommitMessage = genSingleArgHandler('commitMessage')
 
 function processHash(
   index: number,
@@ -210,7 +186,6 @@ function processVersion(
   return { nextIndex, nextState }
 }
 
-
 function processLogLevel(
   index: number,
   state: IOptions,
@@ -226,9 +201,7 @@ function processLogLevel(
   }
 
   if (expectedModfiers.indexOf(modifier) === -1) {
-    throw new Error(expectedToEqualErr(
-      modifier, expectedModfiers.join(', ')
-    ))
+    throw new Error(expectedToEqualErr(modifier, expectedModfiers.join(', ')))
   }
 
   const nextState: IOptions = {
@@ -240,8 +213,5 @@ function processLogLevel(
   return { nextIndex, nextState }
 }
 
-
-const expectedToEqualErr = (expected: string, actual: string) => 
+const expectedToEqualErr = (expected: string, actual: string) =>
   red(`Expected ${yellow(expected)} to equal ${yellow(actual)}`)
-
-

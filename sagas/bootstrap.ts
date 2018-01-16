@@ -1,7 +1,6 @@
-
 import * as fse from 'fs-extra'
 import { call } from 'redux-saga/effects'
-import { 
+import {
   logger,
   printWelcomeMessage,
   startLogWriteInterval,
@@ -54,8 +53,8 @@ export function* ensureCliAppsAreInstalled() {
   try {
     yield* REQUIRED_CLI_APPS.map(app => {
       logger.debug(`Checking if ${app} is installed`)
-      return call( checkIfCliProgramIsInstalled, app )
-    })    
+      return call(checkIfCliProgramIsInstalled, app)
+    })
   } catch (err) {
     criticalFailure(err)
   }

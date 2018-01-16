@@ -1,10 +1,15 @@
 import * as fse from 'fs-extra'
 import * as path from 'path'
 import { call } from 'redux-saga/effects'
-import { SagaIterator } from 'redux-saga';
+import { SagaIterator } from 'redux-saga'
 const { red } = require('chalk')
 
-import { options, REPO_INFO, DOCKER_CONTAINER_NAME, DOCKERFILE_FOLDER } from '../configs'
+import {
+  options,
+  REPO_INFO,
+  DOCKER_CONTAINER_NAME,
+  DOCKERFILE_FOLDER
+} from '../configs'
 import { criticalFailure } from '../lib'
 import { bootstrap, teardown } from './bootstrap'
 import {
@@ -15,26 +20,24 @@ import {
   versionMode
 } from './modes'
 
-
 export function* rootSaga(): SagaIterator {
   try {
-    
     yield call(bootstrap)
 
-    switch(options.mode) {
+    switch (options.mode) {
       case 'hash':
         yield call(hashMode)
-        break        
+        break
       case 'verify':
         yield call(verifyMode)
-        break        
+        break
       case 'package':
         yield call(packageMode)
-        break        
+        break
       case 'push':
         yield call(pushMode)
-        break        
-      case 'version': 
+        break
+      case 'version':
         yield call(versionMode)
         break
       default:
@@ -42,7 +45,6 @@ export function* rootSaga(): SagaIterator {
     }
 
     yield call(teardown)
-
   } catch (err) {
     criticalFailure(err)
   }
