@@ -6,7 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node index.ts",
-    "sandbox": "ts-node sandbox/test.ts"
+    "sandbox": "ts-node sandbox/test.ts",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": ["prettier --write", "git add"]
   },
   "keywords": [],
   "author": "",
@@ -28,6 +32,8 @@
   },
   "devDependencies": {
     "@types/klaw": "^2.1.1",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.0.0",
     "prettier": "1.10.2",
     "ts-node": "^4.1.0",
     "typescript": "^2.6.2"
