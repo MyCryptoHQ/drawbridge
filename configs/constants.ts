@@ -11,7 +11,6 @@ export const TEMP_FOLDER_BASE = `/tmp/${APP_NAME}`
 export const SESSION_ID = Math.random().toString(36).substr(2, 10);
 export const SESSION_FOLDER = path.resolve(TEMP_FOLDER_BASE, SESSION_ID)
 export const SESSION_LOG_FILE = path.resolve(SESSION_FOLDER, 'log')
-export const TESTING = 'FUCK YOU'
 
 interface IRepoInfo {
   develop: {

@@ -1,5 +1,5 @@
 
-import { options, SESSION_LOG_FILE, TESTING } from '../configs'
+import { options, SESSION_LOG_FILE } from '../configs'
 import * as ora from 'ora'
 import * as fse from 'fs-extra'
 
