@@ -43,17 +43,17 @@ Here's a rundown of the four modes where `[repo*]` is either `develop`, `staging
 
  - `hash [repo]`
 	 - Pull down the target repository, build the project, calculate a hash of the built files. 
-	 - Ex: `npm start -- hash develop`
+	 - e.g. `npm start -- hash develop`
  - `verify [repoA] to [repoB]`
 	 - Pull down `repoA` and `repoB`, build the projects, calculate hashes of the built files, and compare the hashes.
-	 - Ex: `npm start -- verify develop to staging`
+	 - e.g. `npm start -- verify develop to staging`
  - `package [repoA] to [repoB]`
 	 - Pull down `repoA`, build the project, and copy the output to the `dist` folder of `repoB`.
-	 - Ex: `npm start -- package develop to staging`
+	 - e.g. `npm start -- package develop to staging`
  - `push [repoA] to [repoB]`
 	 - The same as mode `package`, but the changes to `repoB` are committed and pushed to origin. 
 	 - **Requires two additional arguments `--newBranch [branchName]` and `--commitMessage [message]`.**
-	 - Ex: `npm start -- push develop to staging --newBranch release-0.0.1 --commitMessage "Release 0.0.1"`
+	 - e.g. `npm start -- push develop to staging --newBranch release-0.0.1 --commitMessage "Release 0.0.1"`
 
 ### Repo Modifiers
 In conjunction with the standard `develop`, `staging`, and `prod` repo names, a particular branch or commit hash can be specified. These flags follow the format `--[repo]Branch [branchName]` and `--[repo]Commit [commitHash]`. If none is supplied, the default branch and latest commit will be used. 
