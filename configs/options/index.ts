@@ -1,3 +1,6 @@
+import * as R from 'ramda'
+const { mergeDeepRight, clone } = R
+
 import { IOptions } from './types'
 import { defaultOptions } from './default'
 import { parseArgAndSetState } from './parsers'
@@ -15,7 +18,11 @@ export const options = ((): IOptions => {
     state = nextState
   }
 
-  return validateOptionsState(state)
+  const stateCopy = mergeDeepRight(state, {})
+
+  validateOptionsState(stateCopy)
+
+  return state
 })()
 
 export const getOptions = () => options

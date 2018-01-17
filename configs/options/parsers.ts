@@ -12,14 +12,14 @@ import { criticalFailure } from '../../lib'
 const { mergeDeepRight, clone } = R
 const { red, yellow } = require('chalk')
 
-const VALID_REPO_OPTIONS = ['develop', 'staging', 'prod']
+export const VALID_REPO_OPTIONS: TRepos[] = ['develop', 'staging', 'prod']
 const isValidRepo = repo => VALID_REPO_OPTIONS.indexOf(repo) !== -1
 
 export function parseArgAndSetState(
   index: number,
   state: IOptions,
   argv: string[]
-): INextIndexAndState | void {
+): INextIndexAndState {
   const currentArg = argv[index]
 
   switch (currentArg) {
@@ -66,7 +66,9 @@ export function parseArgAndSetState(
       return processLogLevel(index, state, argv)
 
     default:
-      return criticalFailure(`Unknown option ${currentArg} in CLI arguments`)
+      criticalFailure(`Unknown option ${currentArg} in CLI arguments`)
+      // won't reach this return in practice, but makes TS happy
+      return { nextState: state, nextIndex: ++index }  
   }
 }
 
@@ -106,8 +108,8 @@ const genSingleArgHandler = (flagTarget: TSingleArg) => (
   const flagFull = `--${flagTarget}`
 
   expect(flagRaw).to.equal(flagFull)
-  expect(flagValue).to.be.string
-  expect(flagValue).to.have.length
+  expect(flagValue).to.be.a('string')
+  expect(flagValue).to.have.lengthOf.at.least(1)
 
   const nextState: IOptions = clone(state)
   const nextIndex = ++index
@@ -160,8 +162,8 @@ function processHash(
 
   if (hashRepo === 'folder') {
     const folderPath = argv[++index]
-    expect(folderPath).to.be.string
-    expect(folderPath).to.have.length
+    expect(folderPath).to.be.a('string')
+    expect(folderPath).to.have.lengthOf.at.least(1)
 
     nextState.hashFolder = folderPath
   }
