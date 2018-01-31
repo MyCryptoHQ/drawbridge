@@ -9,8 +9,9 @@ export type TSingleArg =
   | 'prodCommit'
   | 'newBranch'
   | 'commitMessage'
+  | 'preset'
 
-export interface IOptions {
+export interface IOptions { 
   logLevel: 'debug' | 'normal'
   mode: TModes | null
   modeState: {
@@ -38,6 +39,8 @@ export interface IOptions {
 
   commitMessage: string | null
   newBranch: string | null
+
+  preset: string
 }
 
 export interface INextIndexAndState {

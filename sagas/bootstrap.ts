@@ -9,10 +9,9 @@ import {
   checkIfCliProgramIsInstalled
 } from '../lib'
 
-import { REPO_INFO, REQUIRED_CLI_APPS } from '../configs'
+import { getRepoInfo, REQUIRED_CLI_APPS } from '../configs'
 
 const { ensureDirSync } = fse
-const { develop, staging, prod } = REPO_INFO
 
 export function* bootstrap() {
   try {
@@ -32,6 +31,8 @@ export function* teardown() {
 }
 
 export function* ensureTempFolders() {
+const { develop, staging, prod } = yield call(getRepoInfo)
+
   // develop
   logger.debug(`Creating develop temp folder ${develop.workingFolder}`)
   yield call(ensureDirSync, develop.workingFolder)

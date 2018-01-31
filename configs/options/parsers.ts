@@ -65,6 +65,9 @@ export function parseArgAndSetState(
     case '--logLevel':
       return processLogLevel(index, state, argv)
 
+    case '--preset':
+      return processPreset(index, state, argv)
+
     default:
       criticalFailure(`Unknown option ${currentArg} in CLI arguments`)
       // won't reach this return in practice, but makes TS happy
@@ -139,6 +142,8 @@ const processProdCommit = genSingleArgHandler('prodCommit')
 const proccessNewBranch = genSingleArgHandler('newBranch')
 
 const processCommitMessage = genSingleArgHandler('commitMessage')
+
+const processPreset = genSingleArgHandler('preset')
 
 function processHash(
   index: number,
