@@ -14,7 +14,8 @@ import {
   calcFileInfoContentHash,
   criticalFailure,
   logger,
-  constructHashMessage
+  constructHashMessage,
+  gitRemoveFolder
 } from '../../lib'
 
 export function* packageMode() {
@@ -52,9 +53,10 @@ export function* packageFromAToB(repoFrom: TRepos, repoTo: TRepos) {
   const repoInfo = yield call(getRepoInfo)
   const fromDistFolder = repoInfo[repoFrom].distFolder
   const toDistFolder = repoInfo[repoTo].distFolder
+  const toWorkingFolder = repoInfo[repoTo].workingFolder
 
   logger.log(`Emptying repo ${yellow(repoTo)} dist folder`)
-  yield call(fse.emptyDir, toDistFolder)
+  yield call(gitRemoveFolder, toWorkingFolder, toDistFolder)
   logger.succeed(`Emptied repo ${yellow(repoTo)} dist folder`)
 
   logger.log(`Copying ${yellow(repoFrom)} to ${yellow(repoTo)}`)
