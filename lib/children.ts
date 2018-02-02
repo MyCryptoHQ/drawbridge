@@ -84,9 +84,10 @@ export const buildDockerImage = (
 
 export const buildProjectWithDocker = (
   hostFolder: string,
-  dockerName: string
+  dockerName: string,
+  buildCommand: string
 ): Promise<string> =>
-  runChildProcess(`docker run -v ${hostFolder}:/appDir ${dockerName}`)
+  runChildProcess(`docker run --env BUILD_COMMAND="${buildCommand}" -v ${hostFolder}:/appDir ${dockerName}`)
 
 export const calcSha256FromPath = (filePath: string): Promise<string> =>
   new Promise(async (resolve, reject) => {

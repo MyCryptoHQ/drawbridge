@@ -68,7 +68,7 @@ export function* cloneAndBuildProject(
 
 export function* buildDevelop(): SagaIterator {
   const REPO_INFO = yield call(getRepoInfo)  
-  const { workingFolder } = REPO_INFO.develop
+  const { workingFolder, buildCommand } = REPO_INFO.develop
 
   try {
     logger.log('Building Docker image')
@@ -76,7 +76,7 @@ export function* buildDevelop(): SagaIterator {
     logger.succeed('Built Docker image')
 
     logger.log(`Building ${yellow('develop')} with Docker`)
-    yield call(buildProjectWithDocker, workingFolder, DOCKER_CONTAINER_NAME)
+    yield call(buildProjectWithDocker, workingFolder, DOCKER_CONTAINER_NAME, buildCommand)
     logger.succeed(`Built ${yellow('develop')} with Docker`)
   } catch (err) {
     criticalFailure(err)

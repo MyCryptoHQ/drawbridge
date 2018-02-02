@@ -40,10 +40,10 @@ interface IRepoInfos {
 
 const V3_REPO_INFO: IRepoInfo = {
   develop: {
-    gitUrl: 'git@github.com:skubakdj/developMockTemp.git',
+    gitUrl: 'git@github.com:skubakdj/etherwallet.git',
     workingFolder: path.resolve(SESSION_FOLDER, 'develop'),
     distFolder: path.resolve(SESSION_FOLDER, 'develop', 'dist'),
-    buildCommand: 'npm run build'
+    buildCommand: 'npm install && npm run build'
   },
   staging: {
     gitUrl: 'git@github.com:skubakdj/stagingMockTemp.git',
@@ -59,10 +59,10 @@ const V3_REPO_INFO: IRepoInfo = {
 
 const V4_REPO_INFO: IRepoInfo = {
   develop: {
-    gitUrl: 'git@github.com:skubakdj/developMockTemp.git',
+    gitUrl: 'git@github.com:MyCryptoHQ/MyCrypto.git',
     workingFolder: path.resolve(SESSION_FOLDER, 'develop'),
-    distFolder: path.resolve(SESSION_FOLDER, 'develop', 'dist'),
-    buildCommand: 'npm run build'
+    distFolder: path.resolve(SESSION_FOLDER, 'develop', 'dist', 'prod'),
+    buildCommand: 'npm install && npm run build'
   },
   staging: {
     gitUrl: 'git@github.com:skubakdj/stagingMockTemp.git',
