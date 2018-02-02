@@ -21,5 +21,6 @@ export const defaultOptions: IOptions = {
   hashRepo: null,
   hashFolder: null,
   newBranch: null,
-  commitMessage: null
+  commitMessage: null,
+  preset: 'v4'
 }

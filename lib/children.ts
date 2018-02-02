@@ -70,6 +70,12 @@ export const gitAddDistFolder = (
 ): Promise<string> =>
   runChildProcess(`cd ${workingFolder} && git add ${distFolder}/*`)
 
+export const gitRemoveFolder = (
+  workingFolder: string,
+  distFolder: string
+): Promise<string> =>
+  runChildProcess(`cd ${workingFolder} && git rm -r ${distFolder}`)
+
 export const buildDockerImage = (
   folder: string,
   dockerName: string

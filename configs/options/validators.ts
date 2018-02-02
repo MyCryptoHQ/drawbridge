@@ -1,12 +1,22 @@
 import { IOptions } from './types'
 import { VALID_REPO_OPTIONS } from './parsers'
+import { REPO_INFOS } from '../constants'
 
 export const validateOptionsState = (state: IOptions) => {
 
   onlyOneModeIsSelected(state)
   validPushBranchAndCommit(state)
   noUnnecessaryBranchOrCommitOptions(state)  
+  hasValidPresetInfo(state)
 
+}
+
+export const hasValidPresetInfo = (state: IOptions) => {
+  const validPresets = Object.keys(REPO_INFOS)
+
+  if (validPresets.indexOf(state.preset) === -1) {
+    throw new Error('A valid preset must be provided')
+  }
 }
 
 export const onlyOneModeIsSelected = (state: IOptions) => {

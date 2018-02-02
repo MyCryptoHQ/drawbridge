@@ -6,7 +6,6 @@ const { red } = require('chalk')
 
 import {
   options,
-  REPO_INFO,
   DOCKER_CONTAINER_NAME,
   DOCKERFILE_FOLDER
 } from '../configs'

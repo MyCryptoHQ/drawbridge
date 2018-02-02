@@ -1,6 +1,6 @@
 import {
   options,
-  REPO_INFO,
+  getRepoInfo,
   DOCKER_CONTAINER_NAME,
   DOCKERFILE_FOLDER
 } from '../configs'
@@ -35,6 +35,7 @@ export function* cloneAndBuildProject(
   repoBranch: string | null,
   repoCommit: string | null
 ): SagaIterator {
+  const REPO_INFO = yield call(getRepoInfo)
   const isDevelop = repo === 'develop'
   const { gitUrl, workingFolder } = REPO_INFO[repo]
 
@@ -66,6 +67,7 @@ export function* cloneAndBuildProject(
 }
 
 export function* buildDevelop(): SagaIterator {
+  const REPO_INFO = yield call(getRepoInfo)  
   const { workingFolder } = REPO_INFO.develop
 
   try {
@@ -109,6 +111,7 @@ export function* cloneBuildReport(
   repoBranch: string | null,
   repoCommit: string | null
 ): SagaIterator {
+  const REPO_INFO = yield call(getRepoInfo)  
   const { workingFolder, distFolder } = REPO_INFO[repo]
 
   yield call(cloneAndBuildProject, repo, repoBranch, repoCommit)

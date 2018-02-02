@@ -1,5 +1,7 @@
 import * as path from 'path'
 
+import { getOptions } from './options'
+
 export const APP_NAME = 'drawbridge'
 export const DOCKER_CONTAINER_NAME = 'drawbridge'
 export const DOCKERFILE_FOLDER = path.resolve('./docker')
@@ -31,7 +33,12 @@ interface IRepoInfo {
   }
 }
 
-export const REPO_INFO: IRepoInfo = {
+interface IRepoInfos {
+  v3: IRepoInfo
+  v4: IRepoInfo
+}
+
+const V3_REPO_INFO: IRepoInfo = {
   develop: {
     gitUrl: 'git@github.com:skubakdj/developMockTemp.git',
     workingFolder: path.resolve(SESSION_FOLDER, 'develop'),
@@ -50,4 +57,28 @@ export const REPO_INFO: IRepoInfo = {
   }
 }
 
-export const getRepoInfo = () => REPO_INFO
+const V4_REPO_INFO: IRepoInfo = {
+  develop: {
+    gitUrl: 'git@github.com:skubakdj/developMockTemp.git',
+    workingFolder: path.resolve(SESSION_FOLDER, 'develop'),
+    distFolder: path.resolve(SESSION_FOLDER, 'develop', 'dist'),
+    buildCommand: 'npm run build'
+  },
+  staging: {
+    gitUrl: 'git@github.com:skubakdj/stagingMockTemp.git',
+    workingFolder: path.resolve(SESSION_FOLDER, 'staging'),
+    distFolder: path.resolve(SESSION_FOLDER, 'staging', 'docs')
+  },
+  prod: {
+    gitUrl: 'git@github.com:skubakdj/prodMockTemp.git',
+    workingFolder: path.resolve(SESSION_FOLDER, 'prod'),
+    distFolder: path.resolve(SESSION_FOLDER, 'prod', 'docs')
+  }
+}
+
+export const REPO_INFOS: IRepoInfos = {
+  v3: V3_REPO_INFO,
+  v4: V4_REPO_INFO
+}
+
+export const getRepoInfo = () => REPO_INFOS[getOptions().preset]
