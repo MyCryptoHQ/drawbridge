@@ -12,7 +12,7 @@ import { criticalFailure } from '../../lib'
 const { mergeDeepRight, clone } = R
 const { red, yellow } = require('chalk')
 
-export const VALID_REPO_OPTIONS: TRepos[] = ['develop', 'staging', 'prod']
+export const VALID_REPO_OPTIONS: TRepos[] = ['develop', 'staging', 'prod', 'beta']
 const isValidRepo = repo => VALID_REPO_OPTIONS.indexOf(repo) !== -1
 
 export function parseArgAndSetState(
@@ -55,6 +55,12 @@ export function parseArgAndSetState(
 
     case '--prodCommit':
       return processProdCommit(index, state, argv)
+    
+    case '--betaBranch':
+      return processBetaBranch(index, state, argv)
+
+    case '--betaCommit':
+      return processBetaCommit(index, state, argv)
 
     case '--newBranch':
       return proccessNewBranch(index, state, argv)
@@ -138,6 +144,10 @@ const processStagingCommit = genSingleArgHandler('stagingCommit')
 const processProdBranch = genSingleArgHandler('prodBranch')
 
 const processProdCommit = genSingleArgHandler('prodCommit')
+
+const processBetaBranch = genSingleArgHandler('betaBranch')
+
+const processBetaCommit = genSingleArgHandler('betaCommit')
 
 const proccessNewBranch = genSingleArgHandler('newBranch')
 

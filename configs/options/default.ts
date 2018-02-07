@@ -16,6 +16,8 @@ export const defaultOptions: IOptions = {
   stagingCommit: null,
   prodBranch: null,
   prodCommit: null,
+  betaBranch: null,
+  betaCommit: null,
   repoFrom: null,
   repoTo: null,
   hashRepo: null,

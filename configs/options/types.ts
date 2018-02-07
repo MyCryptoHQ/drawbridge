@@ -1,4 +1,4 @@
-export type TRepos = 'develop' | 'staging' | 'prod'
+export type TRepos = 'develop' | 'staging' | 'prod' | 'beta'
 export type TModes = 'verify' | 'hash' | 'package' | 'push' | 'version'
 export type TSingleArg =
   | 'developBranch'
@@ -7,6 +7,8 @@ export type TSingleArg =
   | 'stagingCommit'
   | 'prodBranch'
   | 'prodCommit'
+  | 'betaBranch'
+  | 'betaCommit'
   | 'newBranch'
   | 'commitMessage'
   | 'preset'

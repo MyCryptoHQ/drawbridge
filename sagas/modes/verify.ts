@@ -13,7 +13,9 @@ export function* verifyMode() {
   if (repoFrom === 'develop' && repoTo === 'staging') {
     yield call(verifyStagingAgainstDevelop)
   } else if (repoFrom === 'staging' && repoTo === 'prod') {
-    yield call(verifyProdAgainstStaging)
+    yield call(verifyProdAgainstStaging) 
+  } else if (repoFrom === 'develop' && repoTo === 'beta') {
+    yield call(verifyBetaAgainstDevelop)
   } else {
     throw new Error(`Cannot verify repo ${repoFrom} against repo ${repoTo}`)
   }
@@ -68,6 +70,13 @@ export function* verifyStagingAgainstDevelop(): SagaIterator {
 export function* verifyProdAgainstStaging(): SagaIterator {
   const repoFrom = 'staging'
   const repoTo = 'prod'
+
+  yield call(verifyAAgainstB, repoFrom, repoTo)
+}
+
+export function* verifyBetaAgainstDevelop(): SagaIterator {
+  const repoFrom = 'develop'
+  const repoTo = 'beta'
 
   yield call(verifyAAgainstB, repoFrom, repoTo)
 }

@@ -30,7 +30,9 @@ export function* pushMode() {
   if (repoFrom === 'develop' && repoTo === 'staging') {
     yield call(pushFromDevelopToStaging)
   } else if (repoFrom === 'staging' && repoTo === 'prod') {
-    yield call(pushFromStagingToProd)
+    yield call(pushFromStagingToProd) 
+   } else if (repoFrom === 'develop' && repoTo === 'beta') {
+    yield call(pushFromDevelopToBeta)
   } else {
     throw new Error(`Cannot package from repo ${repoFrom} to repo ${repoTo}`)
   }
@@ -77,6 +79,13 @@ export function* pushFromDevelopToStaging() {
 export function* pushFromStagingToProd() {
   const repoFrom = 'staging'
   const repoTo = 'prod'
+
+  yield call(pushFromAToB, repoFrom, repoTo)
+}
+
+export function* pushFromDevelopToBeta() {
+  const repoFrom = 'develop'
+  const repoTo = 'beta'
 
   yield call(pushFromAToB, repoFrom, repoTo)
 }

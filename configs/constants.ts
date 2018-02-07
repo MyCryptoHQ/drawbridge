@@ -31,6 +31,11 @@ interface IRepoInfo {
     distFolder: string
     workingFolder: string
   }
+  beta?: {
+    gitUrl: string
+    distFolder: string
+    workingFolder: string
+  }
 }
 
 interface IRepoInfos {
@@ -64,8 +69,8 @@ const V4_REPO_INFO: IRepoInfo = {
     distFolder: path.resolve(SESSION_FOLDER, 'develop', 'dist', 'prod'),
     buildCommand: 'npm install && npm run build'
   },
-  staging: {
-    gitUrl: 'git@github.com:skubakdj/stagingMockTemp.git',
+  staging: {  
+    gitUrl: 'git@github.com:skubakdj/stagingMockTempV4.git',
     workingFolder: path.resolve(SESSION_FOLDER, 'staging'),
     distFolder: path.resolve(SESSION_FOLDER, 'staging', 'docs')
   },
@@ -73,7 +78,12 @@ const V4_REPO_INFO: IRepoInfo = {
     gitUrl: 'git@github.com:skubakdj/prodMockTemp.git',
     workingFolder: path.resolve(SESSION_FOLDER, 'prod'),
     distFolder: path.resolve(SESSION_FOLDER, 'prod', 'docs')
-  }
+  },
+  beta: {  
+    gitUrl: 'git@github.com:MyCryptoHQ/MyCrypto-Beta.git',
+    workingFolder: path.resolve(SESSION_FOLDER, 'staging'),
+    distFolder: path.resolve(SESSION_FOLDER, 'staging', 'docs')
+  },
 }
 
 export const REPO_INFOS: IRepoInfos = {
