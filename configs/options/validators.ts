@@ -3,17 +3,14 @@ import { VALID_REPO_OPTIONS } from './parsers'
 import { REPO_INFOS } from '../constants'
 
 export const validateOptionsState = (state: IOptions) => {
-
   onlyOneModeIsSelected(state)
   validPushBranchAndCommit(state)
-  noUnnecessaryBranchOrCommitOptions(state)  
+  noUnnecessaryBranchOrCommitOptions(state)
   hasValidPresetInfo(state)
-
 }
 
 export const hasValidPresetInfo = (state: IOptions) => {
   const validPresets = Object.keys(REPO_INFOS)
-
   if (validPresets.indexOf(state.preset) === -1) {
     throw new Error('A valid preset must be provided')
   }
@@ -21,10 +18,8 @@ export const hasValidPresetInfo = (state: IOptions) => {
 
 export const onlyOneModeIsSelected = (state: IOptions) => {
   let modeSelected = false
-
   Object.keys(state.modeState).forEach(mode => {
     const selected = state.modeState[mode]
-
     if (selected && modeSelected) {
       throw new Error('Mode than one mode is selected')
     } else if (selected) {
@@ -42,7 +37,7 @@ export const validPushBranchAndCommit = (state: IOptions) => {
   if (!commitMessage) {
     throw new Error('A commit message must be supplied')
   }
-  
+
   if (!newBranch) {
     throw new Error('A new branch must be supplied')
   }
@@ -50,17 +45,16 @@ export const validPushBranchAndCommit = (state: IOptions) => {
 
 export const noUnnecessaryBranchOrCommitOptions = (state: IOptions) => {
   const { repoFrom, repoTo, hashRepo } = state
-  const reposFromTo = [ repoFrom, repoTo, hashRepo ]
-  const badOptions = VALID_REPO_OPTIONS
-    .filter(opt => reposFromTo.indexOf(opt) === -1)
+  const reposFromTo = [repoFrom, repoTo, hashRepo]
+  const badOptions = VALID_REPO_OPTIONS.filter(
+    opt => reposFromTo.indexOf(opt) === -1
+  )
 
-  const badCommitConfig = badOptions
-    .map(opt => opt + 'Commit')
+  const badCommitConfig = badOptions.map(opt => opt + 'Commit')
 
-  const badBranchConfig = badOptions
-    .map(opt => opt + 'Branch')
-  
-  const badConfig = [ ...badCommitConfig, ...badBranchConfig ]
+  const badBranchConfig = badOptions.map(opt => opt + 'Branch')
+
+  const badConfig = [...badCommitConfig, ...badBranchConfig]
 
   badConfig.forEach(config => {
     if (!!state[config]) {
@@ -68,4 +62,3 @@ export const noUnnecessaryBranchOrCommitOptions = (state: IOptions) => {
     }
   })
 }
-

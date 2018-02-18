@@ -1,15 +1,10 @@
 import {
-  options,
   getRepoInfo,
   DOCKER_CONTAINER_NAME,
   DOCKERFILE_FOLDER
 } from '../configs'
-
-const { yellow } = require('chalk')
-
 import { call } from 'redux-saga/effects'
 import { SagaIterator } from 'redux-saga'
-import * as path from 'path'
 import {
   logger,
   cloneGitRepository,
@@ -18,10 +13,6 @@ import {
   normalizeEnumerateFiles,
   addFileSha256,
   addFileOrFolder,
-  IFileInfoA,
-  IFileInfoB,
-  IFileInfoC,
-  calcSha256FromPath,
   calcFileInfoContentHash,
   buildDockerImage,
   buildProjectWithDocker,
@@ -29,6 +20,8 @@ import {
   checkoutGitCommit
 } from '../lib'
 import { TRepos } from '../configs/options/types'
+
+const { yellow } = require('chalk')
 
 export function* cloneAndBuildProject(
   repo: TRepos,
@@ -43,21 +36,18 @@ export function* cloneAndBuildProject(
     logger.log(`Cloning ${yellow(repo)}, watch for SSH password prompt`)
     yield call(cloneGitRepository, gitUrl, workingFolder)
     logger.succeed(`Cloned ${yellow(repo)} to ${yellow(workingFolder)}`)
-
     if (!!repoBranch) {
       yield call(checkoutGitBranch, workingFolder, repoBranch)
       logger.succeed(
         `Checked out branch ${yellow(repoBranch)} on repo ${yellow(repo)}`
       )
     }
-
     if (!!repoCommit) {
       yield call(checkoutGitCommit, workingFolder, repoCommit)
       logger.succeed(
         `Checked out commit ${yellow(repoCommit)} on repo ${yellow(repo)}`
       )
     }
-
     if (isDevelop) {
       yield call(buildDevelop)
     }
@@ -67,16 +57,19 @@ export function* cloneAndBuildProject(
 }
 
 export function* buildDevelop(): SagaIterator {
-  const REPO_INFO = yield call(getRepoInfo)  
+  const REPO_INFO = yield call(getRepoInfo)
   const { workingFolder, buildCommand } = REPO_INFO.develop
-
   try {
     logger.log('Building Docker image')
     yield call(buildDockerImage, DOCKERFILE_FOLDER, DOCKER_CONTAINER_NAME)
     logger.succeed('Built Docker image')
-
     logger.log(`Building ${yellow('develop')} with Docker`)
-    yield call(buildProjectWithDocker, workingFolder, DOCKER_CONTAINER_NAME, buildCommand)
+    yield call(
+      buildProjectWithDocker,
+      workingFolder,
+      DOCKER_CONTAINER_NAME,
+      buildCommand
+    )
     logger.succeed(`Built ${yellow('develop')} with Docker`)
   } catch (err) {
     criticalFailure(err)
@@ -111,11 +104,9 @@ export function* cloneBuildReport(
   repoBranch: string | null,
   repoCommit: string | null
 ): SagaIterator {
-  const REPO_INFO = yield call(getRepoInfo)  
-  const { workingFolder, distFolder } = REPO_INFO[repo]
-
+  const REPO_INFO = yield call(getRepoInfo)
+  const { distFolder } = REPO_INFO[repo]
   yield call(cloneAndBuildProject, repo, repoBranch, repoCommit)
-
   return yield call(genDirectoryContentReport, distFolder)
 }
 

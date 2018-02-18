@@ -1,20 +1,9 @@
 import { call } from 'redux-saga/effects'
-import * as fse from 'fs-extra'
-const { red, yellow } = require('chalk')
-
-import {
-  cloneBuildReport,
-  calcRepoReportAndHash,
-  genDirectoryContentReport,
-  cloneAndBuildProject
-} from '../helpers'
+const { yellow } = require('chalk')
 import { getOptions, getRepoInfo } from '../../configs'
-import { TRepos, TSingleArg } from '../../configs/options/types'
+import { TRepos } from '../../configs/options/types'
 import {
-  calcFileInfoContentHash,
-  criticalFailure,
   logger,
-  constructHashMessage,
   gitNewBranch,
   gitCommit,
   gitPushOrigin,
@@ -30,8 +19,8 @@ export function* pushMode() {
   if (repoFrom === 'develop' && repoTo === 'staging') {
     yield call(pushFromDevelopToStaging)
   } else if (repoFrom === 'staging' && repoTo === 'prod') {
-    yield call(pushFromStagingToProd) 
-   } else if (repoFrom === 'develop' && repoTo === 'beta') {
+    yield call(pushFromStagingToProd)
+  } else if (repoFrom === 'develop' && repoTo === 'beta') {
     yield call(pushFromDevelopToBeta)
   } else {
     throw new Error(`Cannot package from repo ${repoFrom} to repo ${repoTo}`)

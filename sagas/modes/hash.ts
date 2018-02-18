@@ -1,16 +1,11 @@
 import { call } from 'redux-saga/effects'
-const { red, yellow } = require('chalk')
+const { yellow } = require('chalk')
 
-import {
-  cloneBuildReport,
-  calcRepoReportAndHash,
-  genDirectoryContentReport
-} from '../helpers'
+import { calcRepoReportAndHash, genDirectoryContentReport } from '../helpers'
 import { options } from '../../configs'
 import { TRepos } from '../../configs/options/types'
 import {
   calcFileInfoContentHash,
-  criticalFailure,
   logger,
   constructHashMessage
 } from '../../lib'

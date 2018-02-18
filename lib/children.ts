@@ -1,9 +1,8 @@
 import * as fse from 'fs-extra'
 import * as klaw from 'klaw'
 import { createHash } from 'crypto'
-import { spawn, exec } from 'child_process'
+import { spawn } from 'child_process'
 import { REPO_INFO } from '../configs'
-import { relative } from 'path'
 
 import { logger } from './logger'
 
@@ -87,7 +86,9 @@ export const buildProjectWithDocker = (
   dockerName: string,
   buildCommand: string
 ): Promise<string> =>
-  runChildProcess(`docker run -v ${hostFolder}:/appDir ${dockerName} "${buildCommand}"`)
+  runChildProcess(
+    `docker run -v ${hostFolder}:/appDir ${dockerName} "${buildCommand}"`
+  )
 
 export const calcSha256FromPath = (filePath: string): Promise<string> =>
   new Promise(async (resolve, reject) => {

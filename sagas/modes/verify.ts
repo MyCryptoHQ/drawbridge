@@ -4,7 +4,7 @@ import { SagaIterator } from 'redux-saga'
 
 import { logger } from '../../lib'
 import { calcRepoReportAndHash } from '../helpers'
-import { getOptions, getRepoInfo } from '../../configs'
+import { getOptions } from '../../configs'
 const { red, yellow, green } = require('chalk')
 
 export function* verifyMode() {
@@ -13,7 +13,7 @@ export function* verifyMode() {
   if (repoFrom === 'develop' && repoTo === 'staging') {
     yield call(verifyStagingAgainstDevelop)
   } else if (repoFrom === 'staging' && repoTo === 'prod') {
-    yield call(verifyProdAgainstStaging) 
+    yield call(verifyProdAgainstStaging)
   } else if (repoFrom === 'develop' && repoTo === 'beta') {
     yield call(verifyBetaAgainstDevelop)
   } else {

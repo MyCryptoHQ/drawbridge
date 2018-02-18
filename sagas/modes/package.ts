@@ -1,22 +1,11 @@
 import { call } from 'redux-saga/effects'
 import * as fse from 'fs-extra'
-const { red, yellow } = require('chalk')
+const { yellow } = require('chalk')
 
-import {
-  cloneBuildReport,
-  calcRepoReportAndHash,
-  genDirectoryContentReport,
-  cloneAndBuildProject
-} from '../helpers'
+import { cloneAndBuildProject } from '../helpers'
 import { getOptions, getRepoInfo } from '../../configs'
 import { TRepos } from '../../configs/options/types'
-import {
-  calcFileInfoContentHash,
-  criticalFailure,
-  logger,
-  constructHashMessage,
-  gitRemoveFolder
-} from '../../lib'
+import { logger, gitRemoveFolder } from '../../lib'
 
 export function* packageMode() {
   const { repoFrom, repoTo } = yield call(getOptions)

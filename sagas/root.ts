@@ -1,14 +1,7 @@
-import * as fse from 'fs-extra'
-import * as path from 'path'
 import { call } from 'redux-saga/effects'
 import { SagaIterator } from 'redux-saga'
-const { red } = require('chalk')
 
-import {
-  options,
-  DOCKER_CONTAINER_NAME,
-  DOCKERFILE_FOLDER
-} from '../configs'
+import { options } from '../configs'
 import { criticalFailure } from '../lib'
 import { bootstrap, teardown } from './bootstrap'
 import {

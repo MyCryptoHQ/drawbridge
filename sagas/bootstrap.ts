@@ -22,7 +22,6 @@ export function* bootstrap() {
   } catch (err) {
     criticalFailure(err)
   }
-
   logger.succeed('Bootstrapped')
 }
 
@@ -31,7 +30,7 @@ export function* teardown() {
 }
 
 export function* ensureTempFolders() {
-const { develop, staging, prod } = yield call(getRepoInfo)
+  const { develop, staging, prod } = yield call(getRepoInfo)
 
   // develop
   logger.debug(`Creating develop temp folder ${develop.workingFolder}`)

@@ -1,11 +1,9 @@
 import * as path from 'path'
-
 import { getOptions } from './options'
 
 export const APP_NAME = 'drawbridge'
 export const DOCKER_CONTAINER_NAME = 'drawbridge'
 export const DOCKERFILE_FOLDER = path.resolve('./docker')
-
 export const REQUIRED_CLI_APPS = ['git', 'node', 'npm', 'docker']
 export const TEMP_FOLDER_BASE = `/tmp/${APP_NAME}`
 export const SESSION_ID = Math.random()
@@ -69,7 +67,7 @@ const V4_REPO_INFO: IRepoInfo = {
     distFolder: path.resolve(SESSION_FOLDER, 'develop', 'dist', 'prod'),
     buildCommand: 'npm install && npm run build'
   },
-  staging: {  
+  staging: {
     gitUrl: 'git@github.com:skubakdj/stagingMockTempV4.git',
     workingFolder: path.resolve(SESSION_FOLDER, 'staging'),
     distFolder: path.resolve(SESSION_FOLDER, 'staging', 'docs')
@@ -79,11 +77,11 @@ const V4_REPO_INFO: IRepoInfo = {
     workingFolder: path.resolve(SESSION_FOLDER, 'prod'),
     distFolder: path.resolve(SESSION_FOLDER, 'prod', 'docs')
   },
-  beta: {  
+  beta: {
     gitUrl: 'git@github.com:MyCryptoHQ/MyCrypto-Beta.git',
     workingFolder: path.resolve(SESSION_FOLDER, 'staging'),
     distFolder: path.resolve(SESSION_FOLDER, 'staging', 'docs')
-  },
+  }
 }
 
 export const REPO_INFOS: IRepoInfos = {

@@ -13,7 +13,7 @@ export type TSingleArg =
   | 'commitMessage'
   | 'preset'
 
-export interface IOptions { 
+export interface IOptions {
   logLevel: 'debug' | 'normal'
   mode: TModes | null
   modeState: {
@@ -32,6 +32,9 @@ export interface IOptions {
 
   prodBranch: string | null
   prodCommit: string | null
+
+  betaBranch: string | null
+  betaCommit: string | null
 
   repoFrom: TRepos | null
   repoTo: TRepos | null

@@ -12,8 +12,12 @@ import { criticalFailure } from '../../lib'
 const { mergeDeepRight, clone } = R
 const { red, yellow } = require('chalk')
 
-export const VALID_REPO_OPTIONS: TRepos[] = ['develop', 'staging', 'prod', 'beta']
-const isValidRepo = repo => VALID_REPO_OPTIONS.indexOf(repo) !== -1
+export const VALID_REPO_OPTIONS: TRepos[] = [
+  'develop',
+  'staging',
+  'prod',
+  'beta'
+]
 
 export function parseArgAndSetState(
   index: number,
@@ -55,7 +59,7 @@ export function parseArgAndSetState(
 
     case '--prodCommit':
       return processProdCommit(index, state, argv)
-    
+
     case '--betaBranch':
       return processBetaBranch(index, state, argv)
 
@@ -77,7 +81,7 @@ export function parseArgAndSetState(
     default:
       criticalFailure(`Unknown option ${currentArg} in CLI arguments`)
       // won't reach this return in practice, but makes TS happy
-      return { nextState: state, nextIndex: ++index }  
+      return { nextState: state, nextIndex: ++index }
   }
 }
 

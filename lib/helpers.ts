@@ -1,12 +1,9 @@
 import { exec } from 'child_process'
 import { createHash } from 'crypto'
-const { yellow } = require('chalk')
-
 import { logger, IFileInfoC } from '../lib'
 import { TRepos } from '../configs/options/types'
 import { IFileInfoD } from './children'
-
-const { red } = require('chalk')
+const { yellow } = require('chalk')
 
 export const checkIfCliProgramIsInstalled = (cmd: string): Promise<boolean> =>
   new Promise((resolve, reject) => {

@@ -22,7 +22,7 @@ export const defaultOptions: IOptions = {
   repoTo: null,
   hashRepo: null,
   hashFolder: null,
-  newBranch: null,
   commitMessage: null,
+  newBranch: null,
   preset: 'v4'
 }

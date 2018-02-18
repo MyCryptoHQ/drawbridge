@@ -1,5 +1,5 @@
 import * as R from 'ramda'
-const { mergeDeepRight, clone } = R
+const { mergeDeepRight } = R
 
 import { IOptions } from './types'
 import { defaultOptions } from './default'
@@ -8,20 +8,18 @@ import { validateOptionsState } from './validators'
 
 export const options = ((): IOptions => {
   let state: IOptions = { ...defaultOptions }
-  let index = 2 //skip first two arguments
+  // skip first two arguments
+  let index = 2
   const { argv } = process
 
   while (argv[index]) {
     const { nextIndex, nextState } = parseArgAndSetState(index, state, argv)
-
     index = nextIndex
     state = nextState
   }
 
   const stateCopy = mergeDeepRight(state, {})
-
   validateOptionsState(stateCopy)
-
   return state
 })()
 
