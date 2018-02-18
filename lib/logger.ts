@@ -59,7 +59,7 @@ const writeLogFile = async () => {
   try {
     await fse.appendFile(SESSION_LOG_FILE, buffer.join(''))
   } catch (err) {
-    console.error(err)
+    console.error(err.stack)
   }
 }
 

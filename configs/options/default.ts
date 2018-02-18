@@ -1,7 +1,8 @@
-import { IOptions } from './types'
+import { IOptions } from './types';
 
 export const defaultOptions: IOptions = {
   logLevel: 'normal',
+  environments: {},
   mode: null,
   modeState: {
     verify: false,
@@ -25,4 +26,4 @@ export const defaultOptions: IOptions = {
   commitMessage: null,
   newBranch: null,
   preset: 'v4'
-}
+};

@@ -13,8 +13,17 @@ export type TSingleArg =
   | 'commitMessage'
   | 'preset'
 
+export interface EnvironmentConfig {
+        [environment: string]: {
+            gitUrl: string;
+            buildCommand?: string;
+            distFolder?: string;
+        }
+}
+
 export interface IOptions {
   logLevel: 'debug' | 'normal'
+  environments: EnvironmentConfig
   mode: TModes | null
   modeState: {
     verify: boolean

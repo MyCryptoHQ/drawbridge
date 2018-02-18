@@ -1,0 +1,17 @@
+{
+    "environments": {
+        "develop": {
+            "gitUrl": "git@github.com:MyCryptoHQ/MyCrypto.git",
+            "buildCommand": "npm install && npm run build"
+        },
+        "staging": {
+            "gitUrl": "git@github.com:skubakdj/stagingMockTempV4.git"
+        },
+        "prod": {
+            "gitUrl": "git@github.com:skubakdj/prodMockTemp.git"
+        },
+        "beta": {
+            "gitUrl": "git@github.com:MyCryptoHQ/MyCrypto-Beta.git"
+        }
+    }
+}
