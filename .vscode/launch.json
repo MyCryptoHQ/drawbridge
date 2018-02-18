@@ -1,0 +1,26 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "runtimeExecutable": "node",
+
+      "args": [
+        "dist/app.js",
+        "verify",
+        "develop",
+        "to",
+        "beta",
+        "--developCommit",
+        "c5e532082ad9eb57651ce5d0b63a2c8504959e1d",
+        "--betaBranch",
+        "release-beta-0.3.2"
+      ]
+    }
+  ]
+}

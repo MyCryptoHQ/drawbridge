@@ -12,7 +12,6 @@ export const SESSION_ID = Math.random()
 export const SESSION_FOLDER = path.resolve(TEMP_FOLDER_BASE, SESSION_ID);
 export const SESSION_LOG_FILE = path.resolve(SESSION_FOLDER, 'log');
 
-
 // const V3_REPO_INFO: IRepoInfo = {
 //   develop: {
 //     gitUrl: 'git@github.com:skubakdj/etherwallet.git',
@@ -35,22 +34,14 @@ export const SESSION_LOG_FILE = path.resolve(SESSION_FOLDER, 'log');
 let repoInfo = {};
 
 export function setEnvironmentDefaults(environments: EnvironmentConfig) {
-  Object.keys(environments).forEach(environment => {
-    const propertyDefaultMap = {
-      distFolder: path.resolve(SESSION_FOLDER, environment, 'dist', 'prod'),
-      workingFolder: path.resolve(SESSION_FOLDER, environment),
+  repoInfo = Object.entries(environments).reduce((accu, [envId, envConf]) => {
+    const defaultProperties = {
+      distFolder: path.resolve(SESSION_FOLDER, envId, 'dist', 'prod'),
+      workingFolder: path.resolve(SESSION_FOLDER, envId),
       buildCommand: 'npm install && npm run build'
     };
-    Object.keys(propertyDefaultMap).forEach(property => {
-      console.log(environments[environment])
-      if (environments[environment][property]) {
-        environments[environment][property] = propertyDefaultMap[property];
-      }
-    });
-  });
-  repoInfo = environments;
-  console.log(repoInfo)
-  return environments;
+    return { ...accu, [envId]: { ...defaultProperties, ...envConf } };
+  }, {});
 }
 
 export const getRepoInfo = () => repoInfo;
