@@ -113,6 +113,9 @@ export const normalizeEnumerateFiles = (basePath: string, files: IFileInfoA[]): 
     relativePath: file.path.split(basePath)[1]
   }));
 
+export const filterGitFiles = (files: IFileInfoB[]): IFileInfoB[] =>
+  files.filter(file => !(/^\/\.git/.test(file.relativePath)));
+
 export interface IFileInfoC extends IFileInfoB {
   hash: string;
 }

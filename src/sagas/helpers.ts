@@ -13,7 +13,8 @@ import {
   buildDockerImage,
   buildProjectWithDocker,
   checkoutGitBranch,
-  checkoutGitCommit
+  checkoutGitCommit,
+  filterGitFiles
 } from '../lib';
 import { TRepos } from '../configs/options/types';
 
@@ -73,7 +74,10 @@ export function* genDirectoryContentReport(directory: string): SagaIterator {
     const normedFiles = yield call(normalizeEnumerateFiles, directory, files);
     logger.debug('Files normalized');
 
-    const fileWithHash = yield call(addFileSha256, normedFiles);
+    const gitFilesFiltered = yield call(filterGitFiles, normedFiles);
+    logger.debug('Files filtered of git files');
+
+    const fileWithHash = yield call(addFileSha256, gitFilesFiltered);
     logger.debug('Files hashed');
 
     const fileOrFolder = yield call(addFileOrFolder, fileWithHash);
@@ -99,6 +103,7 @@ export function* cloneBuildReport(
 
 export function* calcRepoReportAndHash(repo: TRepos, repoBranch: string, repoCommit: string) {
   const report = yield call(cloneBuildReport, repo, repoBranch, repoCommit);
+  require('fs').writeFileSync('./CLONE_BUILD_REPORT.json', JSON.stringify(report, null, 2), 'utf8')
   const hash = yield call(calcFileInfoContentHash, report);
   return { report, hash };
 }
