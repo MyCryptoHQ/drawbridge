@@ -1,4 +1,3 @@
-console.log(__dirname);
 
 const { version } = require('./package.json');
 const { yellow } = require('chalk');

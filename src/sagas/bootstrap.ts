@@ -34,7 +34,6 @@ export function* ensureTempFolders() {
   // develop
   logger.debug(`Creating develop temp folder ${develop.workingFolder}`);
   yield call(ensureDirSync, develop.workingFolder);
-  console.log('asdaw');
 
   // staging
   logger.debug(`Creating staging temp folder ${staging.workingFolder}`);
