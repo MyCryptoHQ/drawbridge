@@ -22,8 +22,8 @@ export const checkIfCliProgramIsInstalled = (cmd: string): Promise<boolean> =>
   });
 
 export const criticalFailure = (msg: any) => {
-  if (typeof msg === 'object' && msg.obj) {
-    logger.fail(msg.msg);
+  if (typeof msg === 'object' && msg.stack) {
+    logger.fail(msg.stack);
   } else {
     logger.fail(msg);
   }
