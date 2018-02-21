@@ -5,12 +5,12 @@ import { IOptions } from './types';
 import { defaultOptions } from './default';
 import { parseArgAndSetState } from './parsers';
 import { validateOptionsState } from './validators';
-import { setEnvironmentDefaults } from '../constants';
+import { setEnvironmentConfig } from '../constants';
 
 require('rc')('drawbridge', defaultOptions);
 
 export const options = ((): IOptions => {
-  setEnvironmentDefaults(defaultOptions.environments);
+  setEnvironmentConfig(defaultOptions.environments);
   let state: IOptions = { ...defaultOptions };
   // skip first two arguments
   let index = 2;

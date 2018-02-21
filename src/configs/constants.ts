@@ -2,8 +2,10 @@ import * as path from 'path';
 import { EnvironmentConfig } from './options/types';
 
 export const APP_NAME = 'drawbridge';
+export const DRAWBRIDGE_SOURCE_FOLDER = process.env.DRAWBRIDGE_SOURCE_FOLDER;
 export const DOCKER_CONTAINER_NAME = 'drawbridge';
-export const DOCKERFILE_FOLDER = path.resolve('./docker');
+
+export const DOCKERFILE_FOLDER = path.resolve(DRAWBRIDGE_SOURCE_FOLDER, 'docker');
 export const REQUIRED_CLI_APPS = ['git', 'node', 'npm', 'docker'];
 export const TEMP_FOLDER_BASE = `/tmp/${APP_NAME}`;
 export const SESSION_ID = Math.random()
@@ -33,14 +35,18 @@ export const SESSION_LOG_FILE = path.resolve(SESSION_FOLDER, 'log');
 
 let repoInfo = {};
 
-export function setEnvironmentDefaults(environments: EnvironmentConfig) {
+export function setEnvironmentConfig(environments: EnvironmentConfig) {
   repoInfo = Object.entries(environments).reduce((accu, [envId, envConf]) => {
-    const defaultProperties = {
-      distFolder: path.resolve(SESSION_FOLDER, envId, 'dist', 'prod'),
-      workingFolder: path.resolve(SESSION_FOLDER, envId),
-      buildCommand: 'npm install && npm run build'
+
+    const workingFolder = path.resolve(SESSION_FOLDER, envId);
+    const adaptedEnvConf = {
+      ...envConf,
+      workingFolder,
+      distFolder: envConf.distFolder
+        ? path.resolve(workingFolder, envConf.distFolder)
+        : path.resolve(workingFolder)
     };
-    return { ...accu, [envId]: { ...defaultProperties, ...envConf } };
+    return { ...accu, [envId]: { ...adaptedEnvConf } };
   }, {});
 }
 
