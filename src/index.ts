@@ -1,3 +1,4 @@
+import 'source-map-support/register';
 import createSagaMiddleware from 'redux-saga';
 import { createStore, applyMiddleware } from 'redux';
 import { rootSaga } from './sagas';
