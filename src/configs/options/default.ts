@@ -1,8 +1,19 @@
-import { IOptions } from './types';
+import { IRcOptions, IModeOptions } from './types';
 
-export const defaultOptions: IOptions = {
-  logLevel: 'normal',
+export const defaultRcOptions: IRcOptions = {
   environments: {},
+  fromBranch: null,
+  fromCommit: null,
+  toBranch: null,
+  toCommit: null,
+  newBranch: null,
+  commitMessage: null,
+  version: null,
+  config: '',
+  dockerfileFolder: null
+};
+
+export const defaultModeOptions: IModeOptions = {
   mode: null,
   modeState: {
     verify: false,
@@ -11,19 +22,7 @@ export const defaultOptions: IOptions = {
     push: false,
     version: false
   },
-  developBranch: null,
-  developCommit: null,
-  stagingBranch: null,
-  stagingCommit: null,
-  prodBranch: null,
-  prodCommit: null,
-  betaBranch: null,
-  betaCommit: null,
-  repoFrom: null,
-  repoTo: null,
-  hashRepo: null,
-  hashFolder: null,
-  commitMessage: null,
-  newBranch: null,
-  preset: 'v4'
+  fromEnvironment: '',
+  toEnvironment: '',
+  folder: null
 };

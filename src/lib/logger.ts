@@ -1,4 +1,4 @@
-import { options, SESSION_LOG_FILE } from '../configs';
+import { SESSION_LOG_FILE } from '../configs';
 import * as ora from 'ora';
 import * as fse from 'fs-extra';
 
@@ -26,11 +26,6 @@ export const logger = (() => {
 
   const debug = (msg: string) => {
     file(msg);
-    if (options.logLevel !== 'debug') {
-      return;
-    }
-    spinner.info(msg);
-    spinner.start(currentText);
   };
 
   const succeed = (msg?: string) => {

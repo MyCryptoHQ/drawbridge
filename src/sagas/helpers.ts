@@ -1,4 +1,4 @@
-import { getRepoInfo, DOCKER_CONTAINER_NAME, DOCKERFILE_FOLDER } from '../configs';
+import { getEnvConfig, DOCKER_CONTAINER_NAME, DOCKERFILE_FOLDER, getOptions } from '../configs';
 import { call } from 'redux-saga/effects';
 import { SagaIterator } from 'redux-saga';
 import {
@@ -16,45 +16,42 @@ import {
   checkoutGitCommit,
   filterGitFiles
 } from '../lib';
-import { TRepos } from '../configs/options/types';
 
 const { yellow } = require('chalk');
 
 export function* cloneAndBuildProject(
-  repo: TRepos,
-  repoBranch: string | null,
-  repoCommit: string | null
+  environment: string,
+  envBranch: string | null,
+  envCommit: string | null
 ): SagaIterator {
-  const REPO_INFO = yield call(getRepoInfo);
-  const isDevelop = repo === 'develop';
-  const { gitUrl, workingFolder } = REPO_INFO[repo];
+  const { gitUrl, workingFolder, buildCommand } = yield call(getEnvConfig, environment);
 
   try {
-    logger.log(`Cloning ${yellow(repo)}, watch for SSH password prompt`);
+    logger.log(`Cloning ${yellow(environment)}, watch for SSH password prompt`);
     yield call(cloneGitRepository, gitUrl, workingFolder);
-    logger.succeed(`Cloned ${yellow(repo)} to ${yellow(workingFolder)}`);
-    if (!!repoBranch) {
-      yield call(checkoutGitBranch, workingFolder, repoBranch);
-      logger.succeed(`Checked out branch ${yellow(repoBranch)} on repo ${yellow(repo)}`);
+    logger.succeed(`Cloned ${yellow(environment)} to ${yellow(workingFolder)}`);
+    if (!!envBranch) {
+      yield call(checkoutGitBranch, workingFolder, envBranch);
+      logger.succeed(`Checked out branch ${yellow(envBranch)} from environment ${yellow(environment)}`);
     }
-    if (!!repoCommit) {
-      yield call(checkoutGitCommit, workingFolder, repoCommit);
-      logger.succeed(`Checked out commit ${yellow(repoCommit)} on repo ${yellow(repo)}`);
+    if (!!envCommit) {
+      yield call(checkoutGitCommit, workingFolder, envCommit);
+      logger.succeed(`Checked out commit ${yellow(envCommit)} from environment ${yellow(environment)}`);
     }
-    if (isDevelop) {
-      yield call(buildDevelop);
+    if (buildCommand) {
+      yield call(buildProject, environment);
     }
   } catch (err) {
     criticalFailure(err);
   }
 }
 
-export function* buildDevelop(): SagaIterator {
-  const REPO_INFO = yield call(getRepoInfo);
-  const { workingFolder, buildCommand } = REPO_INFO.develop;
+export function* buildProject(environment: string): SagaIterator {
+  const { workingFolder, buildCommand, dockerfileFolder } = yield call(getEnvConfig, environment);
+
   try {
     logger.log('Building Docker image');
-    yield call(buildDockerImage, DOCKERFILE_FOLDER, DOCKER_CONTAINER_NAME);
+    yield call(buildDockerImage, dockerfileFolder, DOCKER_CONTAINER_NAME);
     logger.succeed('Built Docker image');
     logger.log(`Building ${yellow('develop')} with Docker`);
     yield call(buildProjectWithDocker, workingFolder, DOCKER_CONTAINER_NAME, buildCommand);
@@ -91,19 +88,18 @@ export function* genDirectoryContentReport(directory: string): SagaIterator {
 }
 
 export function* cloneBuildReport(
-  repo: TRepos,
-  repoBranch: string | null,
-  repoCommit: string | null
+  environment: string,
+  envBranch: string | null,
+  envCommit: string | null
 ): SagaIterator {
-  const REPO_INFO = yield call(getRepoInfo);
-  const { distFolder } = REPO_INFO[repo];
-  yield call(cloneAndBuildProject, repo, repoBranch, repoCommit);
+  const { environments } = yield call(getOptions);
+  const { distFolder } = environments[environment];
+  yield call(cloneAndBuildProject, environment, envBranch, envCommit);
   return yield call(genDirectoryContentReport, distFolder);
 }
 
-export function* calcRepoReportAndHash(repo: TRepos, repoBranch: string, repoCommit: string) {
-  const report = yield call(cloneBuildReport, repo, repoBranch, repoCommit);
-  require('fs').writeFileSync('./CLONE_BUILD_REPORT.json', JSON.stringify(report, null, 2), 'utf8')
+export function* calcRepoReportAndHash(environment: string, envBranch: string, envCommit: string) {
+  const report = yield call(cloneBuildReport, environment, envBranch, envCommit);
   const hash = yield call(calcFileInfoContentHash, report);
   return { report, hash };
 }

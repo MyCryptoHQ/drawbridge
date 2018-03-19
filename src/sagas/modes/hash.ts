@@ -1,33 +1,38 @@
+
 import { call } from 'redux-saga/effects';
 const { yellow } = require('chalk');
 
 import { calcRepoReportAndHash, genDirectoryContentReport } from '../helpers';
-import { options } from '../../configs';
-import { TRepos } from '../../configs/options/types';
+import { getOptions } from '../../configs';
 import { calcFileInfoContentHash, logger, constructHashMessage } from '../../lib';
 
 export function* hashMode() {
-  const { hashRepo, hashFolder } = options;
+  const { 
+    fromEnvironment, 
+    folder 
+  } = yield call(getOptions);
 
-  if (hashRepo === 'folder') {
-    yield call(calcFolderHash, hashFolder);
+  if (fromEnvironment === 'folder') {
+    yield call(calcFolderHash, folder);
   } else {
-    yield call(calcOnlyRepoHash, hashRepo);
+    yield call(calcOnlyRepoHash, fromEnvironment);
   }
 }
 
-export function* calcOnlyRepoHash(repo: TRepos) {
-  const repoBranch = options[`${repo}Branch`];
-  const repoCommit = options[`${repo}Commit`];
+export function* calcOnlyRepoHash(environment: string) {
+  const { 
+    fromEnvironment, 
+    fromBranch,
+    fromCommit
+  } = yield call(getOptions);
 
-  const { hash } = yield call(calcRepoReportAndHash, repo, repoBranch, repoCommit);
+  const { hash } = yield call(calcRepoReportAndHash, environment, fromBranch, fromCommit);
 
-  logger.succeed(constructHashMessage(repo, hash, repoBranch, repoCommit));
+  logger.succeed(constructHashMessage(environment, hash, fromBranch, fromCommit));
 }
 
 export function* calcFolderHash(folderPath: string) {
   const report = yield call(genDirectoryContentReport, folderPath);
-
   const hash = yield call(calcFileInfoContentHash, report);
 
   logger.succeed(`Folder ${yellow(folderPath)} produced a hash of ${yellow(hash)}`);

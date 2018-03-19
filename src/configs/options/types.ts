@@ -1,29 +1,31 @@
-export type TRepos = 'develop' | 'staging' | 'prod' | 'beta';
 export type TModes = 'verify' | 'hash' | 'package' | 'push' | 'version';
-export type TSingleArg =
-  | 'developBranch'
-  | 'developCommit'
-  | 'stagingBranch'
-  | 'stagingCommit'
-  | 'prodBranch'
-  | 'prodCommit'
-  | 'betaBranch'
-  | 'betaCommit'
-  | 'newBranch'
-  | 'commitMessage'
-  | 'preset';
 
-export interface EnvironmentConfig {
-  [environment: string]: {
-    gitUrl: string;
-    buildCommand?: string;
-    distFolder?: string;
-  };
+export interface IEnvironmentConfig {
+  gitUrl: string;
+  distFolder: string;
+  defaultBranch?: string;
+  buildCommand?: string;
+  dockerfileFolder?: string;
 }
 
-export interface IOptions {
-  logLevel: 'debug' | 'normal';
-  environments: EnvironmentConfig;
+export interface IEnvironmentConfigs {
+  [environment: string]: IEnvironmentConfig;
+}
+
+export interface IRcOptions {
+  environments: IEnvironmentConfigs;
+  fromBranch: string | null;
+  fromCommit: string | null;
+  toBranch: string | null;
+  toCommit: string | null;
+  newBranch: string | null;
+  commitMessage: string | null;
+  version: boolean | null;
+  config: string;
+  dockerfileFolder: string | null;
+}
+
+export interface IModeOptions {
   mode: TModes | null;
   modeState: {
     verify: boolean;
@@ -32,32 +34,21 @@ export interface IOptions {
     push: boolean;
     version: boolean;
   };
-
-  developBranch: string | null;
-  developCommit: string | null;
-
-  stagingBranch: string | null;
-  stagingCommit: string | null;
-
-  prodBranch: string | null;
-  prodCommit: string | null;
-
-  betaBranch: string | null;
-  betaCommit: string | null;
-
-  repoFrom: TRepos | null;
-  repoTo: TRepos | null;
-
-  hashRepo: TRepos | 'folder' | null;
-  hashFolder: string | null;
-
-  commitMessage: string | null;
-  newBranch: string | null;
-
-  preset: string;
+  fromEnvironment: string | 'folder';
+  toEnvironment: string;
+  folder: string | null;
 }
+
+export interface IDerivedOptions {
+  fromEnvConfig: IEnvironmentConfig;
+  toEnvConfig: IEnvironmentConfig;
+}
+
+export type TModeAndRcOptions = IRcOptions & IModeOptions;
+export type TOptions = TModeAndRcOptions & IDerivedOptions;
 
 export interface INextIndexAndState {
   nextIndex: number;
-  nextState: IOptions;
+  nextState: IModeOptions;
 }
+

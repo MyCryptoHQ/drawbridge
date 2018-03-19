@@ -1,25 +1,89 @@
-import { IOptions } from './types';
-import { VALID_REPO_OPTIONS } from './parsers';
+import * as path from 'path';
 
-export const validateOptionsState = (state: IOptions) => {
+import { IRcOptions, TOptions, IModeOptions, IEnvironmentConfigs } from './types';
+import { RC_PROPERTIES_WHITELIST } from '../constants';
+
+
+/**
+ * mode parsing validation
+ */
+
+export const validateModeOptions = (state: IModeOptions) => {
   onlyOneModeIsSelected(state);
-  validPushBranchAndCommit(state);
-  noUnnecessaryBranchOrCommitOptions(state);
 };
 
-export const onlyOneModeIsSelected = (state: IOptions) => {
+const onlyOneModeIsSelected = (state: IModeOptions) => {
   let modeSelected = false;
   Object.keys(state.modeState).forEach(mode => {
     const selected = state.modeState[mode];
     if (selected && modeSelected) {
-      throw new Error('Mode than one mode is selected');
+      throw new Error('More than one mode is selected');
     } else if (selected) {
       modeSelected = true;
     }
   });
 };
 
-export const validPushBranchAndCommit = (state: IOptions) => {
+/**
+ * rc validation 
+ */
+
+export const validateRcOptions = (rcOpts: IRcOptions) => {
+  noUnknownRcArgs(rcOpts);
+  noEmptyConfig(rcOpts);
+};
+
+const noUnknownRcArgs = (rcOpts: IRcOptions) => {
+  Object.keys(rcOpts).forEach(key => {
+    if (RC_PROPERTIES_WHITELIST.indexOf(key) === -1) {
+      throw new Error(`Unknown argument '${key}'`);
+    } 
+  });
+};
+
+const noEmptyConfig = (rcOpts: IRcOptions) => {
+  if (rcOpts.config.length === 0) {
+    throw new Error('No config file found');
+  }
+};
+
+/**
+ * merged app options validation
+ */
+
+export function validateAppOptions(options: TOptions) {
+  const {
+    fromEnvironment,
+    toEnvironment,
+    environments,
+    config
+  } = options;
+
+  if (fromEnvironment) {
+    ensureEnvironmentIsValid(fromEnvironment, environments, config);
+  }
+
+  if (toEnvironment) {
+    ensureEnvironmentIsValid(toEnvironment, environments, config);
+  }
+
+  validPushBranchAndCommit(options);
+}
+
+
+function ensureEnvironmentIsValid(env: string, environments: IEnvironmentConfigs, config: string) {
+  if (Object.keys(environments).indexOf(env) === -1) {
+    throw new Error(`Environment '${env}' was not found in ${config}`);
+  }
+
+  const { gitUrl } = environments[env];
+
+  if (!gitUrl || !gitUrl.length) {
+    throw new Error(`Environment '${env}' needs to have property 'gitUrl' set`);
+  }
+}
+
+function validPushBranchAndCommit (state: TOptions) {
   const { modeState, commitMessage, newBranch } = state;
   if (!modeState.push) {
     return;
@@ -32,22 +96,4 @@ export const validPushBranchAndCommit = (state: IOptions) => {
   if (!newBranch) {
     throw new Error('A new branch must be supplied');
   }
-};
-
-export const noUnnecessaryBranchOrCommitOptions = (state: IOptions) => {
-  const { repoFrom, repoTo, hashRepo } = state;
-  const reposFromTo = [repoFrom, repoTo, hashRepo];
-  const badOptions = VALID_REPO_OPTIONS.filter(opt => reposFromTo.indexOf(opt) === -1);
-
-  const badCommitConfig = badOptions.map(opt => opt + 'Commit');
-
-  const badBranchConfig = badOptions.map(opt => opt + 'Branch');
-
-  const badConfig = [...badCommitConfig, ...badBranchConfig];
-
-  badConfig.forEach(config => {
-    if (!!state[config]) {
-      throw new Error(`Cannot have ${config} set`);
-    }
-  });
-};
+}

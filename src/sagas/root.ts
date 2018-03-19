@@ -1,7 +1,7 @@
 import { call } from 'redux-saga/effects';
 import { SagaIterator } from 'redux-saga';
 
-import { options } from '../configs';
+import { getOptions } from '../configs';
 import { criticalFailure } from '../lib';
 import { bootstrap, teardown } from './bootstrap';
 import { hashMode, packageMode, pushMode, verifyMode, versionMode } from './modes/index';
@@ -9,6 +9,8 @@ import { hashMode, packageMode, pushMode, verifyMode, versionMode } from './mode
 export function* rootSaga(): SagaIterator {
   try {
     yield call(bootstrap);
+
+    const options = yield call(getOptions);
 
     switch (options.mode) {
       case 'hash':

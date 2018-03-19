@@ -3,79 +3,49 @@ import * as fse from 'fs-extra';
 const { yellow } = require('chalk');
 
 import { cloneAndBuildProject } from '../helpers';
-import { getOptions, getRepoInfo } from '../../configs';
-import { TRepos } from '../../configs/options/types';
+import { getOptions, getEnvConfig } from '../../configs';
 import { logger, gitRemoveFolder } from '../../lib';
 
+
 export function* packageMode() {
-  const { repoFrom, repoTo } = yield call(getOptions);
+  const options = yield call(getOptions);
+  const {
+    environments,
+    fromEnvironment,
+    fromBranch,
+    fromCommit,
+    toEnvironment,
+    toBranch,
+    toCommit
+  } = options;
 
-  if (repoFrom === 'develop' && repoTo === 'staging') {
-    yield call(packageFromDevelopToStaging);
-  } else if (repoFrom === 'staging' && repoTo === 'prod') {
-    yield call(packageFromStagingToProd);
-  } else if (repoFrom === 'develop' && repoTo === 'beta') {
-    yield call(packageFromDevelopToBeta);
-  } else {
-    throw new Error(`Cannot package from repo ${repoFrom} to repo ${repoTo}`);
-  }
 
+  // clone and build fromBranch
+  yield call(cloneAndBuildProject, fromEnvironment, fromBranch, fromCommit);
+
+  // clone and build toBranch
+  yield call(cloneAndBuildProject, toEnvironment, toBranch, toCommit);
+
+  // const repoInfo = yield call(getRepoInfo);
+  const fromDistFolder = environments[fromEnvironment].distFolder;
+  const toDistFolder = environments[toEnvironment].distFolder;
+  const toWorkingFolder = environments[toEnvironment].workingFolder;
+
+  logger.log(`Emptying environment ${yellow(toEnvironment)} dist folder`);
+  yield call(gitRemoveFolder, toWorkingFolder, toDistFolder);
+  logger.succeed(`Emptied environment ${yellow(toEnvironment)} dist folder`);
+
+  logger.log(`Copying ${yellow(fromEnvironment)} to ${yellow(toEnvironment)}`);
+  yield call(fse.copy, fromDistFolder, toDistFolder);
   logger.succeed(
-    `Repo ${yellow(repoTo)} is now populated with dist files from repo ${yellow(
-      repoFrom
+    `Copied ${yellow(fromEnvironment)} [${yellow(fromDistFolder)}] to ${yellow(toEnvironment)} [${yellow(
+      toDistFolder
+    )}]`
+  );
+  logger.succeed(
+    `Repo ${yellow(toEnvironment)} is now populated with dist files from repo ${yellow(
+      fromEnvironment
     )}. These changes can be manually committed to a branch and pushed into a PR`
   );
 }
 
-export function* packageFromAToB(repoFrom: TRepos, repoTo: TRepos) {
-  const options = yield call(getOptions);
-
-  const fromBranch = options[`${repoFrom}Branch`];
-  const fromCommit = options[`${repoFrom}Commit`];
-  const toBranch = options[`${repoTo}Branch`];
-  const toCommit = options[`${repoTo}Commit`];
-
-  // clone and build fromBranch
-  yield call(cloneAndBuildProject, repoFrom, fromBranch, fromCommit);
-
-  // clone and build toBranch
-  yield call(cloneAndBuildProject, repoTo, toBranch, toCommit);
-
-  const repoInfo = yield call(getRepoInfo);
-  const fromDistFolder = repoInfo[repoFrom].distFolder;
-  const toDistFolder = repoInfo[repoTo].distFolder;
-  const toWorkingFolder = repoInfo[repoTo].workingFolder;
-
-  logger.log(`Emptying repo ${yellow(repoTo)} dist folder`);
-  yield call(gitRemoveFolder, toWorkingFolder, toDistFolder);
-  logger.succeed(`Emptied repo ${yellow(repoTo)} dist folder`);
-
-  logger.log(`Copying ${yellow(repoFrom)} to ${yellow(repoTo)}`);
-  yield call(fse.copy, fromDistFolder, toDistFolder);
-  logger.succeed(
-    `Copied ${yellow(repoFrom)} [${yellow(fromDistFolder)}] to ${yellow(repoTo)} [${yellow(
-      toDistFolder
-    )}]`
-  );
-}
-
-export function* packageFromDevelopToStaging() {
-  const repoFrom = 'develop';
-  const repoTo = 'staging';
-
-  yield call(packageFromAToB, repoFrom, repoTo);
-}
-
-export function* packageFromStagingToProd() {
-  const repoFrom = 'staging';
-  const repoTo = 'prod';
-
-  yield call(packageFromAToB, repoFrom, repoTo);
-}
-
-export function* packageFromDevelopToBeta() {
-  const repoFrom = 'develop';
-  const repoTo = 'beta';
-
-  yield call(packageFromAToB, repoFrom, repoTo);
-}

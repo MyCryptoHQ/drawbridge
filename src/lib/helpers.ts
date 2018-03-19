@@ -1,7 +1,6 @@
 import { exec } from 'child_process';
 import { createHash } from 'crypto';
 import { logger, IFileInfoC } from '../lib';
-import { TRepos } from '../configs/options/types';
 import { IFileInfoD } from './children';
 const { yellow } = require('chalk');
 
@@ -51,13 +50,13 @@ export const calcFileInfoContentHash = (fileInfo: IFileInfoC[]) => {
 };
 
 export const constructHashMessage = (
-  repo: TRepos,
+  repo: string,
   hash: string,
-  repoBranch: string,
-  repoCommit: string
+  envBranch: string,
+  envCommit: string
 ) =>
-  `Repo ${yellow(repo)}${repoBranch ? ` on branch ${yellow(repoBranch)}` : ''}${
-    repoCommit ? ` from commit ${yellow(repoCommit)}` : ''
+  `Environment ${yellow(repo)}${envBranch ? ` on branch ${yellow(envBranch)}` : ''}${
+    envCommit ? ` from commit ${yellow(envCommit)}` : ''
   } produced a hash of ${yellow(hash)}`;
 
 export const findUniqueBetweenFileInfos = (

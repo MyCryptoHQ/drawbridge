@@ -9,12 +9,13 @@ import {
   checkIfCliProgramIsInstalled
 } from '../lib';
 
-import { getRepoInfo, REQUIRED_CLI_APPS } from '../configs';
+import { getOptions, REQUIRED_CLI_APPS, SESSION_FOLDER } from '../configs';
 
 const { ensureDirSync } = fse;
 
 export function* bootstrap() {
   try {
+    yield call(ensureDirSync, SESSION_FOLDER);
     yield call(printWelcomeMessage);
     yield call(ensureCliAppsAreInstalled);
     yield call(ensureTempFolders);
@@ -30,18 +31,27 @@ export function* teardown() {
 }
 
 export function* ensureTempFolders() {
-  const { develop, staging, prod } = yield call(getRepoInfo);
-  // develop
-  logger.debug(`Creating develop temp folder ${develop.workingFolder}`);
-  yield call(ensureDirSync, develop.workingFolder);
+  const { 
+    mode, 
+    fromEnvironment, 
+    toEnvironment,
+    fromEnvConfig,
+    toEnvConfig 
+  } = yield call(getOptions);
+  
+  if (mode === 'hash' && fromEnvironment === 'folder') {
+    return;
+  }
 
-  // staging
-  logger.debug(`Creating staging temp folder ${staging.workingFolder}`);
-  yield call(ensureDirSync, staging.workingFolder);
+  // 'fromEnvironment' will always be specified
+  logger.debug(`Creating ${fromEnvironment} temp folder ${fromEnvConfig.workingFolder}`);
+  yield call(ensureDirSync, fromEnvConfig.workingFolder);
 
-  // prod
-  logger.debug(`Creating prod temp folder ${prod.workingFolder}`);
-  yield call(ensureDirSync, prod.workingFolder);
+  // 'toEnvironment' will not be specified in hash mode
+  if (toEnvironment) {
+    logger.debug(`Creating ${toEnvironment} temp folder ${toEnvConfig.workingFolder}`);
+    yield call(ensureDirSync, toEnvConfig.workingFolder);
+  }
 
   logger.debug('Temp folders created');
 }
