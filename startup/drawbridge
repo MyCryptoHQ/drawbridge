@@ -1,9 +1,9 @@
 #!/bin/bash
 
-base_path=$( cd "$(dirname "${BASH_SOURCE[0]}")/.." ; pwd -P )
-app_path="$base_path/dist/app.js"
+base_path=$( dirname "$(readlink -f "$0")" )
+app_path="$base_path/../dist/app.js"
 
-export DRAWBRIDGE_SOURCE_FOLDER="$base_path"
+export DRAWBRIDGE_SOURCE_FOLDER="$base_path/.."
 
 node $app_path $@
 
