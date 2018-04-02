@@ -8,7 +8,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node fuse"
+    "start": "node fuse && node dist/app",
+    "dev": "node fuse",
+    "build": "node fuse"
   },
   "keywords": [],
   "author": "",

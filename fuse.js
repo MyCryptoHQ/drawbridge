@@ -6,8 +6,18 @@ const fuse = FuseBox.init({
   output: 'dist/$name.js',
   plugins: [JSONPlugin()]
 });
-fuse
-  .bundle('app')
-  .instructions(' > index.ts')
-  .watch();
+const {npm_lifecycle_event} = process.env;
+
+
+if (npm_lifecycle_event === 'dev') {
+  fuse
+    .bundle('app')
+    .instructions(' > index.ts')
+    .watch();
+} else {
+  fuse
+    .bundle('app')
+    .instructions(' > index.ts');
+}
+
 fuse.run();
