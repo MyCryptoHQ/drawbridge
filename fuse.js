@@ -6,8 +6,7 @@ const fuse = FuseBox.init({
   output: 'dist/$name.js',
   plugins: [JSONPlugin()]
 });
-const {npm_lifecycle_event} = process.env;
-
+const { npm_lifecycle_event } = process.env;
 
 if (npm_lifecycle_event === 'dev') {
   fuse
