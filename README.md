@@ -1,6 +1,6 @@
 # drawbridge
 
-A command line application that helps deploy and verify projects that build deterministically. While this tool is used and tested regularly by its maintainers, it's still under active development. Use at your own risk.
+A command line application that helps deploy and verify projects that build deterministically. **While this tool is used and tested regularly by its maintainers, it's still under active development. Use at your own risk.**
 
 ## Prerequisites
 
