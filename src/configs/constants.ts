@@ -22,6 +22,7 @@ export const RC_PROPERTIES_WHITELIST = [
   'config',
   'configs',
   'environments',
+  'dockerfileFolder',
   '_',
   'SOURCE_FOLDER'
 ];
