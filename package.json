@@ -2,15 +2,15 @@
   "name": "drawbridge",
   "version": "0.1.0",
   "description": "",
-  "main": "dist/app.js",
+  "main": "dist/index.js",
   "bin": {
     "drawbridge": "startup/drawbridge"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node fuse && node dist/app",
-    "dev": "node fuse",
-    "build": "node fuse"
+    "start": "dist/index.js",
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [],
   "author": "",
