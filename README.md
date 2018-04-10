@@ -9,11 +9,8 @@ This app is developed for Mac and Linux environments. Windows is not supported a
 The following programs need to be installed and available on your `PATH`:
 
 * `node`
-
 * `npm`
-
 * `docker`
-
 * `git`
 
 ## Installation
@@ -41,3 +38,38 @@ Run the following in the drawbridge source folder:
 ```
 npm remove -g .
 ```  
+## Example `.drawbridgerc` File
+
+```
+{
+  "environments": {
+    "develop": {
+      "gitUrl": "git@github.com:skubakdj/MyCrypto.git",
+      "distFolder": "dist/prod",
+      "buildCommand": "yarn && npm run build"
+    },
+    "staging": {
+      "gitUrl": "git@github.com:skubakdj/MyCrypto-Staging.git",
+      "distFolder": "docs"            
+    },
+    "prod": {
+      "gitUrl": "git@github.com:skubakdj/MyCrypto-Production.git",
+      "distFolder": "docs"
+    }
+  }
+}
+```
+
+## Command Examples
+
+Push `develop` to `staging` from `develop` commit `bfeeab`:
+```
+drawbridge push develop to staging --fromCommit bfeeab --commitMessage "test-release-a" --newBranch "test-branch-a"
+```
+---
+
+Verify `develop` to `staging` from `develop` commit `bfeeab` to `staging` branch `test-branch-a`:
+```
+drawbridge verify develop to staging --fromCommit bfeeab --toBranch "test-branch-a"
+```
+
