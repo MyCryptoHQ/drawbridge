@@ -2,8 +2,6 @@ import * as fse from 'fs-extra';
 import * as klaw from 'klaw';
 import { createHash } from 'crypto';
 import { spawn } from 'child_process';
-import { REPO_INFO } from '../configs';
-
 import { logger } from './logger';
 
 export const runChildProcess = (cmd: string): Promise<string> =>
@@ -114,7 +112,7 @@ export const normalizeEnumerateFiles = (basePath: string, files: IFileInfoA[]): 
   }));
 
 export const filterGitFiles = (files: IFileInfoB[]): IFileInfoB[] =>
-  files.filter(file => !(/^\/\.git/.test(file.relativePath)));
+  files.filter(file => !/^\/\.git/.test(file.relativePath));
 
 export interface IFileInfoC extends IFileInfoB {
   hash: string;
