@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "dist/index.js",
+    "start": "startup/drawbridge",
     "build": "tsc",
     "prepublishOnly": "npm i && npm run build"
   },
