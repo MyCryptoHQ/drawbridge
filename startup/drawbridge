@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# use node to resolve symlink since commands differ from mac & linux
+abs_path=$( node -e "console.log(require('fs').realpathSync('$0'))" )
+dir_path=$( dirname $abs_path )
+src_path="$dir_path/.."
+app_path="$src_path/dist/index.js"
+
+export DRAWBRIDGE_SOURCE_FOLDER="$src_path"
+
+node $app_path $@

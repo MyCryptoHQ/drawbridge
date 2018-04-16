@@ -1,6 +1,6 @@
 FROM node:8.9.4
 
-RUN apt-get update && apt-get install libusb-1.0 nasm
+RUN apt-get update && apt-get install -y libusb-1.0 nasm graphicsmagick
 
 VOLUME ["/appDir"]
 
