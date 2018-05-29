@@ -23,7 +23,7 @@ export function normalizeAndMergeOptions(
 
   const dockerfileAdded = normDockerfileConfig(mergedConfig);
   const defaultBranchSet = normDefaultBranch(dockerfileAdded);
-  const envConfigAdded = addEnvConfig(dockerfileAdded);
+  const envConfigAdded = addEnvConfig(defaultBranchSet);
 
   return envConfigAdded;
 }
