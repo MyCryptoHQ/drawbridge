@@ -1,5 +1,4 @@
 
-
 export function mockAllRunChildProcess() {
   jest.mock('../../src/lib/children', () => {
   const original = require.requireActual('../../src/lib/children');
@@ -79,7 +78,7 @@ export function resolveOnLineLogged(logger, regex) {
 
   return new Promise(resolve => {
     setInterval(() => {
-      getLoggedLines.forEach(line => {
+      getLoggedLines().forEach(line => {
         if (regex.test(line)) {
           resolve(line);
         }
