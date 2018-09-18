@@ -26,7 +26,7 @@ export const criticalFailure = (msg: any) => {
   } else {
     logger.fail(msg);
   }
-  process.exit(1);
+  process.exitCode = 1;
 };
 
 export const sortFileInfo = (fileInfo: IFileInfoC[]): IFileInfoC[] =>
