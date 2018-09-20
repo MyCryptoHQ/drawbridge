@@ -21,6 +21,8 @@ describe('hash mode', () => {
   let finalLine;
 
   beforeAll(async () => {
+    jest.clearAllMocks();
+    
     // modify env for drawbridge
     originalCwd = process.cwd();
     originalArgs = [...process.argv];

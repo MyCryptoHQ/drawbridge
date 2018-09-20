@@ -86,3 +86,22 @@ export function resolveOnLineLogged(logger, regex) {
     }, 100);
   });
 }
+
+export async function calcFolderHash(folderPath: string) {
+  const { 
+    enumerateFilesInDir,
+    normalizeEnumerateFiles,
+    filterGitFiles,
+    addFileSha256,
+    addFileOrFolder
+  } = require('../../src/lib/children');
+  const { calcFileInfoContentHash } = require('../../src/lib/helpers');
+
+  const files = await enumerateFilesInDir(folderPath);
+  const normedFiles = await normalizeEnumerateFiles(folderPath, files);
+  const gitFilesFiltered = await filterGitFiles(normedFiles);
+  const fileWithHash = await addFileSha256(gitFilesFiltered);
+  const fileOrFolder = await addFileOrFolder(fileWithHash);
+
+  return calcFileInfoContentHash(fileOrFolder);
+}
