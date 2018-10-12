@@ -9,7 +9,7 @@ export const TEMP_FOLDER_BASE = `/tmp/${APP_NAME}`;
 export const SESSION_ID = Math.random()
   .toString(36)
   .substr(2, 10);
-export const SESSION_FOLDER = path.resolve(TEMP_FOLDER_BASE, SESSION_ID);
+export const SESSION_FOLDER = process.env.DRAWBRIDGE_SESSION_FOLDER || path.resolve(TEMP_FOLDER_BASE, SESSION_ID);
 export const SESSION_LOG_FILE = path.resolve(SESSION_FOLDER, 'log');
 export const RC_PROPERTIES_WHITELIST = [
   'fromBranch',
@@ -24,5 +24,6 @@ export const RC_PROPERTIES_WHITELIST = [
   'environments',
   'dockerfileFolder',
   '_',
-  'SOURCE_FOLDER'
+  'SOURCE_FOLDER',
+  'SESSION_FOLDER'
 ];
