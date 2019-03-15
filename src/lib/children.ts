@@ -45,7 +45,7 @@ export const gitPushOrigin = (workingFolder: string, branchName: string): Promis
   runChildProcess(`cd ${workingFolder} && git push origin ${branchName}`);
 
 export const gitAddDistFolder = (workingFolder: string, distFolder: string): Promise<string> =>
-  runChildProcess(`cd ${workingFolder} && git add ${distFolder}/*`);
+  runChildProcess(`cd ${distFolder} && git add .`);
 
 export const gitRemoveFolder = (workingFolder: string, distFolder: string): Promise<string> =>
   runChildProcess(`cd ${workingFolder} && git rm -r ${distFolder}`);
