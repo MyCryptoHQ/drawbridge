@@ -1,4 +1,4 @@
-FROM node:8.9.4
+FROM node:8.16.0
 
 RUN echo "deb [check-valid-until=no] http://archive.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list
 
