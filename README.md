@@ -9,7 +9,7 @@ This app is developed for Mac and Linux environments. Windows is not supported a
 The following programs need to be installed and available on your `PATH`:
 
 * `node`
-* `npm`
+* `yarn`
 * `docker`
 * `git`
 
@@ -19,25 +19,29 @@ Clone repository, install modules, build project, install globally:
 ```
 git clone git@github.com:MyCryptoHQ/drawbridge.git
 cd drawbridge
-npm install
-npm run build
-npm install -g .
+yarn
+yarn build
+yarn global add file:$PWD
 ```
 
+Note: `npm install` is not supported.
+
 ## Updating
+
 Run the following in the drawbridge source folder:
 ```
 git pull origin
-npm install
-npm run build
+yarn
+yarn build
 ```
 
 ## Uninstalling
 
 Run the following in the drawbridge source folder:
 ```
-npm remove -g .
-```  
+yarn global remove drawbridge
+```
+
 ## Example `.drawbridgerc` File
 
 ```
